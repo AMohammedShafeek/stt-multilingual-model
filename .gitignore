@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+
+.cache/
+*.bin
+*.pt
+
+transcripts/
+dataset/audio/
+
+.env
