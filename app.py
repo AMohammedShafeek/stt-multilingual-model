@@ -7,7 +7,7 @@ model = WhisperModel("medium", device="cpu")
 
 print("Starting Transcription...\n")
 
-segments, info = model.transcribe("dataset/audio/003_clean.wav")
+segments, info = model.transcribe("dataset/audio/002_clean.wav")
 
 print("Detected Language: ", info.language)
 
