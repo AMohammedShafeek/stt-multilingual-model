@@ -33,18 +33,23 @@ STT/
 ├── audio/                   # Raw input audio files
 │
 ├── dataset/
-│   ├── audio/              # Normalized, preprocessed audio files
+│   ├── audio/              # Normalized, preprocessed audio files (16kHz, mono)
 │   │   ├── 001_clean.wav
 │   │   ├── 002_clean.wav
 │   │   └── 003_clean.wav
 │   └── metadata.csv         # CSV mapping filenames to transcript text
 │
 ├── transcripts/             # Output transcription results
+│   └── output.txt           # Saved full transcription output text
 │
-├── app.py                   # Speech-to-text runner script
-├── clean.py                 # Audio preprocessing and normalization script
-├── dataset.py               # Dataset loading and verification script
-├── processor.py             # Feature processor / Whisper tokenization script
+├── app.py                   # Speech-to-text inference script using Faster Whisper
+├── clean.py                 # Audio preprocessing and normalization script (via Pydub)
+├── dataset.py               # Hugging Face dataset loading and verification script
+├── feature.py               # Log-Mel spectrogram audio feature extraction verification
+├── prepare.py               # Complete Hugging Face dataset-wide mapping pipeline script
+├── processor.py             # Pretrained WhisperProcessor instantiation validation
+├── tokenTest.py             # Whisper text tokenization and token ID verification
+├── training.py              # Individual training sample constructor verification
 │
 ├── requirements.txt         # Project package dependencies
 ├── README.md                # Documentation (this file)
@@ -199,16 +204,45 @@ python app.py
 
 ---
 
-## 🧪 Pipeline Verification
+## 🧪 Pipeline Verification & Prototyping
 
-Verify individual steps of the machine learning pipeline by running:
+This project splits the typical complex end-to-end Machine Learning pipeline into bite-sized, easily testable components. Verify each stage of the data preparation and model pipeline using the dedicated test scripts:
 
+### 1. Dataset Ingestion Verification
+Loads the local `metadata.csv` using the Hugging Face `datasets` library to verify the dataset split and columns.
 ```bash
-# Load and test dataset structure
 python dataset.py
+```
 
-# Load the Whisper Feature Processor
+### 2. Pretrained Processor Validation
+Verifies that the `transformers` library correctly downloads, instantiates, and loads the standard Whisper configuration processor for `openai/whisper-medium`.
+```bash
 python processor.py
+```
+
+### 3. Log-Mel Spectrogram Feature Extraction
+Loads a cleaned audio file at a 16kHz sample rate, applies padding/truncation, and extracts 80-channel Log-Mel Spectrogram features.
+```bash
+python feature.py
+```
+* **Output Feature Shape**: Expects a tensor of shape `(1, 80, 3000)` representing the spectrogram parameters processed in 30-second windows.
+
+### 4. Text Tokenization & Vocab Mapping
+Tokenizes sample raw text transcripts into model-ready vocabulary token IDs.
+```bash
+python tokenTest.py
+```
+
+### 5. Individual Training Sample Constructor
+Runs the complete feature extraction and tokenization flow on a single, isolated audio-text pair and formats it as a model training dictionary (`{"input_features": ..., "labels": ...}`).
+```bash
+python training.py
+```
+
+### 6. Dynamic Dataset Mapping Pipeline
+Applies the preprocessing logic across the entire loaded dataset in parallel/sequence using the Hugging Face `.map()` method, preparing the complete dataset for model fine-tuning.
+```bash
+python prepare.py
 ```
 
 ---
