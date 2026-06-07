@@ -49,7 +49,8 @@ STT/
 ├── prepare.py               # Complete Hugging Face dataset-wide mapping pipeline script
 ├── processor.py             # Pretrained WhisperProcessor instantiation validation
 ├── tokenTest.py             # Whisper text tokenization and token ID verification
-├── training.py              # Individual training sample constructor verification
+├── training_sample.py       # Individual training sample constructor verification
+├── train.py                 # Full fine-tuning script using Seq2SeqTrainer
 │
 ├── requirements.txt         # Project package dependencies
 ├── README.md                # Documentation (this file)
@@ -154,6 +155,8 @@ librosa==0.11.0
 pydub==0.25.1
 ffmpeg-python==0.2.0
 numpy==2.2.6
+sentencepiece==0.2.1
+jiwer==4.0.0
 ```
 
 ---
@@ -215,7 +218,7 @@ python dataset.py
 ```
 
 ### 2. Pretrained Processor Validation
-Verifies that the `transformers` library correctly downloads, instantiates, and loads the standard Whisper configuration processor for `openai/whisper-medium`.
+Verifies that the `transformers` library correctly downloads, instantiates, and loads the standard Whisper configuration processor for `openai/whisper-tiny`.
 ```bash
 python processor.py
 ```
@@ -236,13 +239,19 @@ python tokenTest.py
 ### 5. Individual Training Sample Constructor
 Runs the complete feature extraction and tokenization flow on a single, isolated audio-text pair and formats it as a model training dictionary (`{"input_features": ..., "labels": ...}`).
 ```bash
-python training.py
+python training_sample.py
 ```
 
 ### 6. Dynamic Dataset Mapping Pipeline
 Applies the preprocessing logic across the entire loaded dataset in parallel/sequence using the Hugging Face `.map()` method, preparing the complete dataset for model fine-tuning.
 ```bash
 python prepare.py
+```
+
+### 7. Full Model Fine-Tuning
+Fine-tunes the `openai/whisper-tiny` model on the processed dataset using the Hugging Face `Seq2SeqTrainer` and saves the resulting model to `./whisper-finetuned`.
+```bash
+python train.py
 ```
 
 ---
@@ -301,11 +310,11 @@ This project was built to explore and master:
 
 ### ❌ CUDA Errors / DLL Missing
 * **Error**: `cublas64_12.dll not found`
-* **Fix**: Force the application to use CPU mode in the script initialization:
+* **Fix**: Force the application to use CUDA mode in the script initialization:
   ```python
   model = WhisperModel(
-      "base",
-      device="cpu"
+      "tiny",
+      device="cuda"
   )
   ```
 

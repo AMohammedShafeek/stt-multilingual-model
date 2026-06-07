@@ -7,6 +7,19 @@ __pycache__/
 *.pt
 
 transcripts/
+venv/
+__pycache__/
+*.pyc
+
+.cache/
+*.bin
+*.pt
+
+transcripts/
 dataset/audio/
 
 .env
+
+collections/
+whisper-finetuned/
+*.safetensors

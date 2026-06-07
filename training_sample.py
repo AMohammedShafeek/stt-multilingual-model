@@ -6,7 +6,7 @@ from transformers import WhisperProcessor
 print("Loading processor...")
 
 processor = WhisperProcessor.from_pretrained(
-    "openai/whisper-medium"
+    "openai/whisper-tiny"
 )
 
 # =========================

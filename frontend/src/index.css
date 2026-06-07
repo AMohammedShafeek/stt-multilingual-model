@@ -1,0 +1,214 @@
+:root {
+  --term-bg: #000000;
+  --term-text: #ffffff;
+  --term-dim: #ffffff;
+  --term-border: #ffffff;
+  --term-highlight: #ffffff;
+  --danger: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Consolas', 'Courier New', monospace;
+  background-color: var(--term-bg);
+  color: var(--term-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: none;
+  font-size: 0.8rem;
+}
+
+.app-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Left Panel: Recorder & Transcript */
+.left-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid var(--term-border);
+}
+
+.recorder-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid var(--term-border);
+  padding: 2rem;
+  position: relative;
+}
+
+.transcript-section {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: var(--term-bg);
+}
+
+/* Right Panel: Terminal Log */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
+}
+
+.panel-header {
+  background-color: var(--term-bg);
+  color: var(--term-text);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--term-border);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Typography & General */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: normal;
+}
+
+h1 {
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+h2 {
+  color: var(--term-dim);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+p {
+  color: var(--term-dim);
+}
+
+/* Audio Recorder Specifics */
+.record-btn {
+  width: 100px;
+  height: 100px;
+  background: transparent;
+  border: 2px solid var(--term-text);
+  color: var(--term-text);
+  border-radius: 0; /* Square retro look */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+  margin-bottom: 1rem;
+}
+
+.record-btn svg {
+  width: 40px;
+  height: 40px;
+}
+
+.record-btn:hover,
+.record-btn.recording:hover {
+  background: var(--term-highlight);
+  color: var(--term-bg);
+}
+
+.record-btn.recording {
+  border-color: var(--danger);
+  color: var(--danger);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  background: transparent;
+  border: 1px solid var(--term-text);
+  color: var(--term-text);
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--term-text);
+  color: var(--term-bg);
+}
+
+.btn:disabled {
+  border-color: var(--term-dim);
+  color: var(--term-dim);
+  cursor: not-allowed;
+}
+
+select.btn option {
+  background: var(--term-bg);
+  color: var(--term-text);
+}
+/* Audio Player */
+audio {
+  filter: invert(1) grayscale(1);
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 1rem;
+}
+
+/* Transcript Box */
+.transcript-text {
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.transcript-text::before {
+  content: "> ";
+  color: var(--term-dim);
+}
+
+/* Terminal Console Component */
+.terminal-console {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  line-height: 1.4;
+}
+
+.log-line {
+  margin-bottom: 0.2rem;
+  word-break: break-all;
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: var(--term-text);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+.transcript-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}

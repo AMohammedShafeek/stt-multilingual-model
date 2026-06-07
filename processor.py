@@ -3,7 +3,7 @@ from transformers import WhisperProcessor
 print("Loading Processor...")
 
 processor = WhisperProcessor.from_pretrained(
-    "openai/whisper-medium"
+    "openai/whisper-tiny"
 )
 
 print("\nProcessor Loaded Successfully!")
